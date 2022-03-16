@@ -17,7 +17,7 @@ class MainScreenVC: UIViewController {
         v.backgroundColor = .systemMint
         return v
     }()
-    // Album
+    // Album and time
     let albumImageView: UIImageView = {
         let iv: UIImageView = UIImageView()
         iv.translatesAutoresizingMaskIntoConstraints = false
@@ -44,7 +44,7 @@ class MainScreenVC: UIViewController {
         stack.spacing = 15
         return stack
     }()
-    // Playback
+    // Playback and titles
     let backButton: UIImageView = {
         let bb: UIImageView = UIImageView()
         bb.translatesAutoresizingMaskIntoConstraints = false
@@ -114,7 +114,7 @@ class MainScreenVC: UIViewController {
         stack.axis = .vertical
         stack.alignment = .trailing
         stack.distribution = .fillProportionally
-        stack.spacing = 25
+        stack.spacing = 20
         return stack
     }()
     
@@ -129,8 +129,6 @@ class MainScreenVC: UIViewController {
         // Setup UI
         albumImageView.image = UIImage(named: "lp")
         songTitlesStack.isHidden = true
-//        songTitle.isHidden = true
-//        songSubtitle.isHidden = true
         // Subviews
         albumStack.addArrangedSubview(albumImageView)
         albumStack.addArrangedSubview(songTime)
@@ -182,19 +180,15 @@ extension MainScreenVC {
                 self.playButton.preferredSymbolConfiguration = UIImage.SymbolConfiguration(pointSize: 30)
                 self.forwardButton.preferredSymbolConfiguration = UIImage.SymbolConfiguration(pointSize: 20)
                 self.songTitlesStack.isHidden = true
-//                self.songTitle.isHidden = true
-//                self.songSubtitle.isHidden = true
                 self.albumStack.axis = .horizontal
                 self.songTime.text = "2:27"
             } else {
                 self.viewHeightConstraint.constant = 180
                 self.albumHeightConstraint.constant = 90
-                self.backButton.preferredSymbolConfiguration = UIImage.SymbolConfiguration(pointSize: 25)
-                self.playButton.preferredSymbolConfiguration = UIImage.SymbolConfiguration(pointSize: 35)
-                self.forwardButton.preferredSymbolConfiguration = UIImage.SymbolConfiguration(pointSize: 25)
+                self.backButton.preferredSymbolConfiguration = UIImage.SymbolConfiguration(pointSize: 30)
+                self.playButton.preferredSymbolConfiguration = UIImage.SymbolConfiguration(pointSize: 40)
+                self.forwardButton.preferredSymbolConfiguration = UIImage.SymbolConfiguration(pointSize: 30)
                 self.songTitlesStack.isHidden = false
-//                self.songTitle.isHidden = false
-//                self.songSubtitle.isHidden = false
                 self.albumStack.axis = .vertical
                 self.songTime.text = "2:27 / 3:14"
             }

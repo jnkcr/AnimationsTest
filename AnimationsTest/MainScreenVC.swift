@@ -143,7 +143,7 @@ class MainScreenVC: UIViewController {
         bottomView.addSubview(playbackStack)
         view.addSubview(bottomView)
         // Targets
-        bottomView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tappingBottomView)))
+        bottomView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tappingBottomView2)))
         // UI config
         NSLayoutConstraint.activate([
             // Bottom bar
@@ -168,37 +168,54 @@ class MainScreenVC: UIViewController {
 extension MainScreenVC {
     
     @objc func tappingBottomView() {
-        // Just let me know that animation should happen
-        print("Bottom bar tapped")
-        // Animation magic
-        UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseInOut) { [weak self] in
+        // Animate
+        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut) { [weak self] in
             guard let self = self else { return }
-            if self.isExtended {
-                self.viewHeightConstraint.constant = 80
-                self.albumHeightConstraint.constant = 50
-                self.backButton.preferredSymbolConfiguration = UIImage.SymbolConfiguration(pointSize: 20)
-                self.playButton.preferredSymbolConfiguration = UIImage.SymbolConfiguration(pointSize: 30)
-                self.forwardButton.preferredSymbolConfiguration = UIImage.SymbolConfiguration(pointSize: 20)
-                self.songTitlesStack.isHidden = true
-                self.albumStack.axis = .horizontal
-                self.songTime.text = "2:27"
-            } else {
-                self.viewHeightConstraint.constant = 180
-                self.albumHeightConstraint.constant = 90
-                self.backButton.preferredSymbolConfiguration = UIImage.SymbolConfiguration(pointSize: 30)
-                self.playButton.preferredSymbolConfiguration = UIImage.SymbolConfiguration(pointSize: 40)
-                self.forwardButton.preferredSymbolConfiguration = UIImage.SymbolConfiguration(pointSize: 30)
-                self.songTitlesStack.isHidden = false
-                self.albumStack.axis = .vertical
-                self.songTime.text = "2:27 / 3:14"
-            }
-            self.view.layoutSubviews()
-            self.bottomView.layoutSubviews()
-            self.albumStack.layoutSubviews()
-            self.playbackStack.layoutSubviews()
-            self.playbackControlsStack.layoutSubviews()
-            self.isExtended.toggle()
+            // Animations
+            self.viewHeightConstraint.constant = self.isExtended ? 80 : 180
+            self.albumHeightConstraint.constant = self.isExtended ? 50 : 90
+            self.backButton.preferredSymbolConfiguration = UIImage.SymbolConfiguration(pointSize: self.isExtended ? 20 : 33)
+            self.playButton.preferredSymbolConfiguration = UIImage.SymbolConfiguration(pointSize: self.isExtended ? 30 : 45)
+            self.forwardButton.preferredSymbolConfiguration = UIImage.SymbolConfiguration(pointSize: self.isExtended ? 20 : 33)
+            self.songTitlesStack.isHidden = self.isExtended
+            self.albumStack.axis = self.isExtended ? .horizontal : .vertical
+            self.songTime.text = self.isExtended ? "2:27" : "2:27 / 3:14"
+            // Make it smooth
+            self.view.layoutIfNeeded()
         }
+        // Toggle
+        isExtended.toggle()
+    }
+    
+    @objc func tappingBottomView2() {
+        UIView.animateKeyframes(withDuration: 10, delay: 0, options: .calculationModeLinear) { [weak self] in
+            guard let self = self else { return }
+            UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.2) {
+                self.songTime.isHidden = true
+                self.view.layoutIfNeeded()
+            }
+            UIView.addKeyframe(withRelativeStartTime: 0.2, relativeDuration: 0.6) {
+                self.viewHeightConstraint.constant = self.isExtended ? 80 : 180
+                self.albumHeightConstraint.constant = self.isExtended ? 50 : 90
+                self.backButton.preferredSymbolConfiguration = UIImage.SymbolConfiguration(pointSize: self.isExtended ? 20 : 33)
+                self.playButton.preferredSymbolConfiguration = UIImage.SymbolConfiguration(pointSize: self.isExtended ? 30 : 45)
+                self.forwardButton.preferredSymbolConfiguration = UIImage.SymbolConfiguration(pointSize: self.isExtended ? 20 : 33)
+                self.songTitlesStack.isHidden = self.isExtended
+                self.albumStack.axis = self.isExtended ? .horizontal : .vertical
+//                self.songTime.isHidden = true
+                self.view.layoutIfNeeded()
+
+            }
+            UIView.addKeyframe(withRelativeStartTime: 0.8, relativeDuration: 0.2) {
+                self.songTime.text = self.isExtended ? "2:27" : "2:27 / 3:14"
+                self.songTime.isHidden = false
+                self.view.layoutIfNeeded()
+            }
+            // Make it smooth
+        }
+        
+        // Toggle
+        isExtended.toggle()
     }
     
 }

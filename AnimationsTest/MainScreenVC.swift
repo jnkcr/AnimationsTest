@@ -31,7 +31,7 @@ class MainScreenVC: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "2:27"
         label.font = .preferredFont(forTextStyle: .body)
-        label.textAlignment = .right
+        label.textAlignment = .natural
         label.textColor = .label
         return label
     }()
@@ -174,9 +174,9 @@ extension MainScreenVC {
             // Animations
             self.viewHeightConstraint.constant = self.isExtended ? 80 : 180
             self.albumHeightConstraint.constant = self.isExtended ? 50 : 90
-            self.backButton.preferredSymbolConfiguration = UIImage.SymbolConfiguration(pointSize: self.isExtended ? 20 : 33)
-            self.playButton.preferredSymbolConfiguration = UIImage.SymbolConfiguration(pointSize: self.isExtended ? 30 : 45)
-            self.forwardButton.preferredSymbolConfiguration = UIImage.SymbolConfiguration(pointSize: self.isExtended ? 20 : 33)
+            self.backButton.preferredSymbolConfiguration = UIImage.SymbolConfiguration(pointSize: self.isExtended ? 20 : 30)
+            self.playButton.preferredSymbolConfiguration = UIImage.SymbolConfiguration(pointSize: self.isExtended ? 30 : 40)
+            self.forwardButton.preferredSymbolConfiguration = UIImage.SymbolConfiguration(pointSize: self.isExtended ? 20 : 30)
             self.songTitlesStack.isHidden = self.isExtended
             self.albumStack.axis = self.isExtended ? .horizontal : .vertical
             self.songTime.text = self.isExtended ? "2:27" : "2:27 / 3:14"
@@ -188,34 +188,37 @@ extension MainScreenVC {
     }
     
     @objc func tappingBottomView2() {
-        UIView.animateKeyframes(withDuration: 10, delay: 0, options: .calculationModeLinear) { [weak self] in
+        let duration: TimeInterval = 10
+        
+        isExtended.toggle()
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + duration / 3) {
+            self.songTime.text = self.isExtended ? "2:27 / 3:14" : "2:27"
+        }
+        
+        UIView.animateKeyframes(withDuration: duration, delay: 0, options: .calculationModeLinear) { [weak self] in
             guard let self = self else { return }
             UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.2) {
-                self.songTime.isHidden = true
+                self.songTime.alpha = 0
                 self.view.layoutIfNeeded()
             }
             UIView.addKeyframe(withRelativeStartTime: 0.2, relativeDuration: 0.6) {
-                self.viewHeightConstraint.constant = self.isExtended ? 80 : 180
-                self.albumHeightConstraint.constant = self.isExtended ? 50 : 90
-                self.backButton.preferredSymbolConfiguration = UIImage.SymbolConfiguration(pointSize: self.isExtended ? 20 : 33)
-                self.playButton.preferredSymbolConfiguration = UIImage.SymbolConfiguration(pointSize: self.isExtended ? 30 : 45)
-                self.forwardButton.preferredSymbolConfiguration = UIImage.SymbolConfiguration(pointSize: self.isExtended ? 20 : 33)
-                self.songTitlesStack.isHidden = self.isExtended
-                self.albumStack.axis = self.isExtended ? .horizontal : .vertical
-//                self.songTime.isHidden = true
+                self.viewHeightConstraint.constant = self.isExtended ? 180 : 80
+                self.albumHeightConstraint.constant = self.isExtended ? 90 : 50
+                self.backButton.preferredSymbolConfiguration = UIImage.SymbolConfiguration(pointSize: self.isExtended ? 30 : 20)
+                self.playButton.preferredSymbolConfiguration = UIImage.SymbolConfiguration(pointSize: self.isExtended ? 40 : 30)
+                self.forwardButton.preferredSymbolConfiguration = UIImage.SymbolConfiguration(pointSize: self.isExtended ? 30 : 20)
+                self.songTitlesStack.isHidden = !self.isExtended
+                self.albumStack.axis = self.isExtended ? .vertical : .horizontal
                 self.view.layoutIfNeeded()
 
             }
             UIView.addKeyframe(withRelativeStartTime: 0.8, relativeDuration: 0.2) {
-                self.songTime.text = self.isExtended ? "2:27" : "2:27 / 3:14"
-                self.songTime.isHidden = false
+                self.songTime.alpha = 1
                 self.view.layoutIfNeeded()
             }
-            // Make it smooth
         }
         
-        // Toggle
-        isExtended.toggle()
     }
     
 }

@@ -73,6 +73,7 @@ class RandomAnimationsVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        simpleLabel.text = "Touch me if you dare.."
         slideThatThing()
     }
     
@@ -121,8 +122,8 @@ extension RandomAnimationsVC {
         
         let totalDuration: TimeInterval = 5
         let relDuration: TimeInterval = 1 / 14
-        let horizontalShift: CGFloat = 100 / 3
-        let verticalShift: CGFloat = 70
+        let horizontalShift: CGFloat = 120 / 3
+        let verticalShift: CGFloat = 80
         let cRadius: CGFloat = bouncingView.frame.height / 2
         
         UIView.animateKeyframes(withDuration: totalDuration, delay: 0, options: [.calculationModeCubic, .layoutSubviews]) { [weak self] in
@@ -210,6 +211,10 @@ extension RandomAnimationsVC {
                 self.bouncingView.transform = CGAffineTransform(translationX: 0 * horizontalShift, y: 0)
                 self.bouncingView.layer.cornerRadius = 0
                 self.bouncingView.backgroundColor = .systemMint
+            }
+        } completion: { isFinished in
+            if isFinished {
+                self.simpleLabel.text = "Estas totalmente loco !!!"
             }
         }
     }

@@ -117,6 +117,36 @@ class MainScreenVC: UIViewController {
         stack.spacing = 20
         return stack
     }()
+    // Next page stack
+    let nextTextLabel: UILabel = {
+        let label: UILabel = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "Already bored?"
+        label.font = .preferredFont(forTextStyle: .caption1)
+        label.textAlignment = .center
+        label.textColor = .label
+        return label
+    }()
+    let nextButton: UIButton = {
+        let button: UIButton = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.configuration?.buttonSize = .large
+        button.configuration?.cornerStyle = .medium
+        button.configuration = .filled()
+        button.tintColor = .systemMint
+        button.setTitle("NEXT", for: .normal)
+        button.titleLabel?.textColor = .black
+        return button
+    }()
+    let nextStack: UIStackView = {
+        let stack: UIStackView = UIStackView()
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        stack.axis = .vertical
+        stack.alignment = .center
+        stack.distribution = .fillProportionally
+        stack.spacing = 10
+        return stack
+    }()
     
     lazy var viewHeightConstraint = bottomView.heightAnchor.constraint(equalToConstant: 80)
     lazy var albumHeightConstraint = albumImageView.heightAnchor.constraint(equalToConstant: 50)
@@ -142,8 +172,12 @@ class MainScreenVC: UIViewController {
         bottomView.addSubview(albumStack)
         bottomView.addSubview(playbackStack)
         view.addSubview(bottomView)
+        nextStack.addArrangedSubview(nextTextLabel)
+        nextStack.addArrangedSubview(nextButton)
+        view.addSubview(nextStack)
         // Targets
         bottomView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tappingBottomView2)))
+        nextButton.addTarget(self, action: #selector(goToNextPage), for: .touchUpInside)
         // UI config
         NSLayoutConstraint.activate([
             // Bottom bar
@@ -160,6 +194,13 @@ class MainScreenVC: UIViewController {
             // Playback stack
             playbackStack.centerYAnchor.constraint(equalTo: bottomView.centerYAnchor),
             playbackStack.trailingAnchor.constraint(equalTo: bottomView.trailingAnchor, constant: -16),
+            // Next stack
+            nextButton.heightAnchor.constraint(equalToConstant: 50),
+            nextButton.leadingAnchor.constraint(equalTo: nextStack.leadingAnchor),
+            nextButton.trailingAnchor.constraint(equalTo: nextStack.trailingAnchor),
+            nextStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
+            nextStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
+            nextStack.bottomAnchor.constraint(equalTo: bottomView.topAnchor, constant: -50),
         ])
     }
 
@@ -188,7 +229,7 @@ extension MainScreenVC {
     }
     
     @objc func tappingBottomView2() {
-        let duration: TimeInterval = 10
+        let duration: TimeInterval = 0.6
         
         isExtended.toggle()
         
@@ -196,7 +237,7 @@ extension MainScreenVC {
             self.songTime.text = self.isExtended ? "2:27 / 3:14" : "2:27"
         }
         
-        UIView.animateKeyframes(withDuration: duration, delay: 0, options: .calculationModeLinear) { [weak self] in
+        UIView.animateKeyframes(withDuration: duration, delay: 0, options: .allowUserInteraction) { [weak self] in
             guard let self = self else { return }
             UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.2) {
                 self.songTime.alpha = 0
@@ -211,7 +252,6 @@ extension MainScreenVC {
                 self.songTitlesStack.isHidden = !self.isExtended
                 self.albumStack.axis = self.isExtended ? .vertical : .horizontal
                 self.view.layoutIfNeeded()
-
             }
             UIView.addKeyframe(withRelativeStartTime: 0.8, relativeDuration: 0.2) {
                 self.songTime.alpha = 1
@@ -219,6 +259,14 @@ extension MainScreenVC {
             }
         }
         
+    }
+    
+}
+
+extension MainScreenVC {
+    
+    @objc func goToNextPage() {
+        navigationController?.pushViewController(RandomAnimationsVC(), animated: true)
     }
     
 }

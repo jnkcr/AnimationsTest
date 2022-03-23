@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F41DB31927EB1C84003312B9 /* RandomAnimationsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F41DB31827EB1C84003312B9 /* RandomAnimationsVC.swift */; };
 		F445B53B27E1E1FD0098F874 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F445B53A27E1E1FD0098F874 /* AppDelegate.swift */; };
 		F445B53D27E1E1FD0098F874 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F445B53C27E1E1FD0098F874 /* SceneDelegate.swift */; };
 		F445B54427E1E1FD0098F874 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F445B54327E1E1FD0098F874 /* Assets.xcassets */; };
@@ -15,6 +16,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		F41DB31827EB1C84003312B9 /* RandomAnimationsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RandomAnimationsVC.swift; sourceTree = "<group>"; };
 		F445B53727E1E1FD0098F874 /* AnimationsTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AnimationsTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F445B53A27E1E1FD0098F874 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F445B53C27E1E1FD0098F874 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -57,6 +59,7 @@
 				F445B53A27E1E1FD0098F874 /* AppDelegate.swift */,
 				F445B53C27E1E1FD0098F874 /* SceneDelegate.swift */,
 				F445B54E27E1E85D0098F874 /* MainScreenVC.swift */,
+				F41DB31827EB1C84003312B9 /* RandomAnimationsVC.swift */,
 				F445B54327E1E1FD0098F874 /* Assets.xcassets */,
 				F445B54527E1E1FD0098F874 /* LaunchScreen.storyboard */,
 				F445B54827E1E1FD0098F874 /* Info.plist */,
@@ -134,6 +137,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F41DB31927EB1C84003312B9 /* RandomAnimationsVC.swift in Sources */,
 				F445B53B27E1E1FD0098F874 /* AppDelegate.swift in Sources */,
 				F445B53D27E1E1FD0098F874 /* SceneDelegate.swift in Sources */,
 				F445B54F27E1E85D0098F874 /* MainScreenVC.swift in Sources */,

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class RandomAnimationsVC: UIViewController {
+final class RandomAnimationsVC: UIViewController {
     
     let slidingView: UIView = {
         let v: UIView = UIView(frame: .zero)
@@ -113,7 +113,6 @@ extension RandomAnimationsVC {
             UIView.addKeyframe(withRelativeStartTime: 0.5, relativeDuration: 0.5) {
                 self.fingerprintImageView.transform = CGAffineTransform(scaleX: 1.0, y: 1.0).rotated(by: 0)
             }
-            self.view.layoutIfNeeded()
         }
     }
     
@@ -126,7 +125,7 @@ extension RandomAnimationsVC {
         let verticalShift: CGFloat = 80
         let cRadius: CGFloat = bouncingView.frame.height / 2
         
-        UIView.animateKeyframes(withDuration: totalDuration, delay: 0, options: [.calculationModeCubic, .layoutSubviews]) { [weak self] in
+        UIView.animateKeyframes(withDuration: totalDuration, delay: 0, options: [.calculationModeCubic]) { [weak self] in
             guard let self = self else { return }
             // 1
             UIView.addKeyframe(withRelativeStartTime: 0 * relDuration, relativeDuration: relDuration) {

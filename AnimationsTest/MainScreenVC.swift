@@ -7,9 +7,10 @@
 
 import UIKit
 
-class MainScreenVC: UIViewController {
+final class MainScreenVC: UIViewController {
     
     var isExtended: Bool = false
+    let childishVC = ChildishVC()
     
     let bottomView: UIView = {
         let v: UIView = UIView()
@@ -147,15 +148,49 @@ class MainScreenVC: UIViewController {
         stack.spacing = 10
         return stack
     }()
+    // Navigation bar buttons
+    lazy var addingChildBarButton: UIBarButtonItem = {
+        let barButton: UIBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "plus.square"), style: .plain, target: self, action: #selector(addingChildButtonTapped))
+        barButton.tintColor = .systemMint
+        return barButton
+    }()
+    lazy var removingChildBarButton: UIBarButtonItem = {
+        let barButton: UIBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "minus.square"), style: .plain, target: self, action: #selector(removingChildButtonTapped))
+        barButton.tintColor = .systemMint
+        return barButton
+    }()
+    lazy var transitionBarButton: UIBarButtonItem = {
+        let barButton: UIBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "slowmo"), style: .plain, target: self, action: #selector(transitionViews))
+        barButton.tintColor = .systemMint
+        return barButton
+    }()
+    // Trans views
+    let trans: UIView = {
+        let v: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
+        v.translatesAutoresizingMaskIntoConstraints = false
+        v.backgroundColor = .systemPink
+        return v
+    }()
+    let imageView: UIImageView = {
+        let iv: UIImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.image = UIImage(named: "lp")
+        return iv
+    }()
+    
     
     lazy var viewHeightConstraint = bottomView.heightAnchor.constraint(equalToConstant: 80)
     lazy var albumHeightConstraint = albumImageView.heightAnchor.constraint(equalToConstant: 50)
 
+// MARK: - Overrides
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Main"
         view.backgroundColor = .systemBackground
         navigationController?.navigationBar.prefersLargeTitles = true
+        navigationItem.rightBarButtonItems = [addingChildBarButton, removingChildBarButton]
+        navigationItem.leftBarButtonItem = transitionBarButton
         // Setup UI
         albumImageView.image = UIImage(named: "lp")
         songTitlesStack.isHidden = true
@@ -175,11 +210,17 @@ class MainScreenVC: UIViewController {
         nextStack.addArrangedSubview(nextTextLabel)
         nextStack.addArrangedSubview(nextButton)
         view.addSubview(nextStack)
+        view.addSubview(imageView)
         // Targets
         bottomView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tappingBottomView2)))
         nextButton.addTarget(self, action: #selector(goToNextPage), for: .touchUpInside)
         // UI config
         NSLayoutConstraint.activate([
+            // Transitioning views
+            imageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 100),
+            imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            imageView.widthAnchor.constraint(equalToConstant: 100),
+            imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor),
             // Bottom bar
             bottomView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             bottomView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -202,9 +243,22 @@ class MainScreenVC: UIViewController {
             nextStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
             nextStack.bottomAnchor.constraint(equalTo: bottomView.topAnchor, constant: -50),
         ])
+        
+        view.addSubview(trans)
+        
+        NSLayoutConstraint.activate([
+            self.trans.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 100),
+            self.trans.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            self.trans.widthAnchor.constraint(equalToConstant: 100),
+            self.trans.heightAnchor.constraint(equalTo: self.trans.widthAnchor),
+        ])
+        
+        trans.isHidden = true
     }
 
 }
+
+// MARK: - Extensions
 
 extension MainScreenVC {
     
@@ -258,7 +312,33 @@ extension MainScreenVC {
                 self.view.layoutIfNeeded()
             }
         }
-        
+    }
+    
+    @objc func addingChildButtonTapped() {
+        addChild(childishVC)
+        view.addSubview(childishVC.view)
+        childishVC.view.translatesAutoresizingMaskIntoConstraints = false
+        childishVC.didMove(toParent: self)
+        NSLayoutConstraint.activate([
+            childishVC.view.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 50),
+            childishVC.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            childishVC.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            childishVC.view.heightAnchor.constraint(equalToConstant: 250)
+        ])
+        view.backgroundColor = .systemGray6
+    }
+    
+    @objc func removingChildButtonTapped() {
+        if childishVC.parent != nil {
+            childishVC.willMove(toParent: nil)
+            childishVC.removeFromParent()
+            childishVC.view.removeFromSuperview()
+        }
+        view.backgroundColor = .systemBackground
+    }
+    
+    @objc func transitionViews() {
+        UIView.transition(from: imageView, to: trans, duration: 1, options: [.transitionFlipFromRight, .showHideTransitionViews])
     }
     
 }
